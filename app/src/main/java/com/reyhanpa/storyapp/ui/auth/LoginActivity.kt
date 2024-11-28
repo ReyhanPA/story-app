@@ -1,22 +1,31 @@
-package com.reyhanpa.storyapp.ui.signup
+package com.reyhanpa.storyapp.ui.auth
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.reyhanpa.storyapp.databinding.ActivitySignupBinding
+import com.reyhanpa.storyapp.R
+import com.reyhanpa.storyapp.data.pref.UserModel
+import com.reyhanpa.storyapp.databinding.ActivityLoginBinding
+import com.reyhanpa.storyapp.ui.ViewModelFactory
+import com.reyhanpa.storyapp.ui.main.MainActivity
 
-class SignupActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignupBinding
+class LoginActivity : AppCompatActivity() {
+    private val viewModel by viewModels<AuthViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignupBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupView()
@@ -38,13 +47,16 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.signupButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-
+        binding.loginButton.setOnClickListener {
+            val email = binding.edLoginEmail.text.toString()
+            viewModel.saveSession(UserModel(email, "sample_token"))
             AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
-                setPositiveButton("Lanjut") { _, _ ->
+                setTitle(resources.getString(R.string.success_title))
+                setMessage(resources.getString(R.string.success_login_message))
+                setPositiveButton(resources.getString(R.string.success_next_text)) { _, _ ->
+                    val intent = Intent(context, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
                     finish()
                 }
                 create()
@@ -61,33 +73,30 @@ class SignupActivity : AppCompatActivity() {
         }.start()
 
         val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
-        val nameTextView =
-            ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
-        val nameEditTextLayout =
-            ObjectAnimator.ofFloat(binding.nameEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val message =
+            ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
         val emailTextView =
             ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
         val emailEditTextLayout =
-            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
+            ObjectAnimator.ofFloat(binding.edLoginEmailLayout, View.ALPHA, 1f).setDuration(100)
         val passwordTextView =
             ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
         val passwordEditTextLayout =
-            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val signup = ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(100)
-
+            ObjectAnimator.ofFloat(binding.edLoginPasswordLayout, View.ALPHA, 1f).setDuration(100)
+        val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
             playSequentially(
                 title,
-                nameTextView,
-                nameEditTextLayout,
+                message,
                 emailTextView,
                 emailEditTextLayout,
                 passwordTextView,
                 passwordEditTextLayout,
-                signup
+                login
             )
             startDelay = 100
         }.start()
     }
+
 }

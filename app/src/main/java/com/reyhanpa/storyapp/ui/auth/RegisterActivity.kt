@@ -1,30 +1,23 @@
-package com.reyhanpa.storyapp.ui.login
+package com.reyhanpa.storyapp.ui.auth
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.reyhanpa.storyapp.R
+import com.reyhanpa.storyapp.databinding.ActivityRegisterBinding
 
-class LoginActivity : AppCompatActivity() {
-    private val viewModel by viewModels<LoginViewModel> {
-        ViewModelFactory.getInstance(this)
-    }
-    private lateinit var binding: ActivityLoginBinding
+class RegisterActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupView()
@@ -46,16 +39,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.loginButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-            viewModel.saveSession(UserModel(email, "sample_token"))
+        binding.registerButton.setOnClickListener {
+            val email = binding.edRegisterEmail.text.toString()
+
             AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
-                setPositiveButton("Lanjut") { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
+                setTitle(resources.getString(R.string.success_title))
+                setMessage(resources.getString(R.string.success_register_message, email))
+                setPositiveButton(resources.getString(R.string.success_next_text)) { _, _ ->
                     finish()
                 }
                 create()
@@ -72,30 +62,33 @@ class LoginActivity : AppCompatActivity() {
         }.start()
 
         val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
-        val message =
-            ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
+        val nameTextView =
+            ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
+        val nameEditTextLayout =
+            ObjectAnimator.ofFloat(binding.edRegisterNameLayout, View.ALPHA, 1f).setDuration(100)
         val emailTextView =
             ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
         val emailEditTextLayout =
-            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
+            ObjectAnimator.ofFloat(binding.edRegisterEmailLayout, View.ALPHA, 1f).setDuration(100)
         val passwordTextView =
             ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
         val passwordEditTextLayout =
-            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
+            ObjectAnimator.ofFloat(binding.edRegisterPasswordLayout, View.ALPHA, 1f).setDuration(100)
+        val register = ObjectAnimator.ofFloat(binding.registerButton, View.ALPHA, 1f).setDuration(100)
+
 
         AnimatorSet().apply {
             playSequentially(
                 title,
-                message,
+                nameTextView,
+                nameEditTextLayout,
                 emailTextView,
                 emailEditTextLayout,
                 passwordTextView,
                 passwordEditTextLayout,
-                login
+                register
             )
             startDelay = 100
         }.start()
     }
-
 }
