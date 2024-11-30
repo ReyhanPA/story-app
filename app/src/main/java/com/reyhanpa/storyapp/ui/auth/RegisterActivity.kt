@@ -2,18 +2,24 @@ package com.reyhanpa.storyapp.ui.auth
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.reyhanpa.storyapp.R
 import com.reyhanpa.storyapp.databinding.ActivityRegisterBinding
+import com.reyhanpa.storyapp.ui.ViewModelFactory
+import com.reyhanpa.storyapp.ui.welcome.WelcomeActivity
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
+    private val viewModel by viewModels<AuthViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,16 +46,20 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.registerButton.setOnClickListener {
+            val name = binding.edRegisterName.text.toString()
             val email = binding.edRegisterEmail.text.toString()
+            val password = binding.edRegisterPassword.text.toString()
 
-            AlertDialog.Builder(this).apply {
-                setTitle(resources.getString(R.string.success_title))
-                setMessage(resources.getString(R.string.success_register_message, email))
-                setPositiveButton(resources.getString(R.string.success_next_text)) { _, _ ->
+            viewModel.register(name, email, password).observe(this) { registerResponse ->
+                val message = registerResponse.message
+                if (registerResponse.error == true) {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@RegisterActivity, WelcomeActivity::class.java)
+                    startActivity(intent)
                     finish()
                 }
-                create()
-                show()
             }
         }
     }

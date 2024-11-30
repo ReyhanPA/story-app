@@ -30,15 +30,15 @@ class CustomEditText @JvmOverloads constructor(
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.toString().isNotEmpty()) showClearButton() else hideClearButton()
 
-                if (id == R.id.ed_login_password || id == R.id.ed_register_password) {
-                    if (s.toString().length < 8) {
-                        setError(resources.getString(R.string.password_required), null)
+                if (id == R.id.ed_login_email || id == R.id.ed_register_email) {
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
+                        setError(resources.getString(R.string.email_required), null)
                     } else {
                         error = null
                     }
-                } else if (id == R.id.ed_login_email || id == R.id.ed_register_email) {
-                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
-                        setError(resources.getString(R.string.email_required), null)
+                } else if (id == R.id.ed_login_password || id == R.id.ed_register_password) {
+                    if (s.toString().length < 8) {
+                        setError(resources.getString(R.string.password_required), null)
                     } else {
                         error = null
                     }

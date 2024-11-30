@@ -8,20 +8,19 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.reyhanpa.storyapp.R
 import com.reyhanpa.storyapp.data.pref.UserModel
 import com.reyhanpa.storyapp.databinding.ActivityLoginBinding
 import com.reyhanpa.storyapp.ui.ViewModelFactory
 import com.reyhanpa.storyapp.ui.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginBinding
     private val viewModel by viewModels<AuthViewModel> {
         ViewModelFactory.getInstance(this)
     }
-    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,18 +48,20 @@ class LoginActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
             val email = binding.edLoginEmail.text.toString()
-            viewModel.saveSession(UserModel(email, "sample_token"))
-            AlertDialog.Builder(this).apply {
-                setTitle(resources.getString(R.string.success_title))
-                setMessage(resources.getString(R.string.success_login_message))
-                setPositiveButton(resources.getString(R.string.success_next_text)) { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            val password = binding.edLoginPassword.text.toString()
+
+            viewModel.login(email, password).observe(this) { loginResponse ->
+                val message = loginResponse.message
+                if (loginResponse.error == true) {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                } else {
+                    viewModel.saveSession(UserModel(email, loginResponse.loginResult?.token.toString()))
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     finish()
                 }
-                create()
-                show()
             }
         }
     }

@@ -15,10 +15,10 @@ import com.reyhanpa.storyapp.ui.ViewModelFactory
 import com.reyhanpa.storyapp.ui.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
-    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.logoutButton.setOnClickListener {
+        binding.actionLogout.setOnClickListener {
             viewModel.logout()
         }
     }
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
         val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
-        val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(100)
+        val logout = ObjectAnimator.ofFloat(binding.actionLogout, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
             playSequentially(name, message, logout)

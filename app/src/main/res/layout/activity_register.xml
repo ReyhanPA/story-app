@@ -102,6 +102,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailTextView"
         app:startIconDrawable="@drawable/ic_baseline_email_24"
+        app:errorEnabled="true"
         tools:alpha="100">
 
         <com.reyhanpa.storyapp.ui.custom.CustomEditText
@@ -142,6 +143,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
         app:startIconDrawable="@drawable/ic_baseline_lock_24"
+        app:errorEnabled="true"
         tools:alpha="100">
 
         <com.reyhanpa.storyapp.ui.custom.CustomEditText
