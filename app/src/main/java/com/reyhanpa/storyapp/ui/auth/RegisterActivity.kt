@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.reyhanpa.storyapp.R
 import com.reyhanpa.storyapp.databinding.ActivityRegisterBinding
 import com.reyhanpa.storyapp.ui.ViewModelFactory
 import com.reyhanpa.storyapp.ui.welcome.WelcomeActivity
@@ -29,17 +30,17 @@ class RegisterActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
     }
 
     private fun setupView() {
-        @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
+            window.insetsController?.show(WindowInsets.Type.statusBars())
         } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+            window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
         supportActionBar?.hide()
     }
@@ -53,9 +54,9 @@ class RegisterActivity : AppCompatActivity() {
             viewModel.register(name, email, password).observe(this) { registerResponse ->
                 val message = registerResponse.message
                 if (registerResponse.error == true) {
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    showToast(message ?: resources.getString(R.string.register_failed_message))
                 } else {
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    showToast(message ?: resources.getString(R.string.register_success_message))
                     val intent = Intent(this@RegisterActivity, WelcomeActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -100,5 +101,14 @@ class RegisterActivity : AppCompatActivity() {
             )
             startDelay = 100
         }.start()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(state: Boolean) {
+        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
+        binding.registerButton.isEnabled = !state
     }
 }

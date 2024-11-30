@@ -4,10 +4,11 @@ import com.reyhanpa.storyapp.data.pref.UserModel
 import com.reyhanpa.storyapp.data.pref.UserPreference
 import com.reyhanpa.storyapp.data.remote.response.LoginResponse
 import com.reyhanpa.storyapp.data.remote.response.RegisterResponse
+import com.reyhanpa.storyapp.data.remote.response.StoryResponse
 import com.reyhanpa.storyapp.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
 
-class UserRepository private constructor(
+class Repository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService
 ) {
@@ -32,15 +33,19 @@ class UserRepository private constructor(
         return apiService.login(email, password)
     }
 
+    suspend fun getStories(): StoryResponse {
+        return apiService.getStories()
+    }
+
     companion object {
         @Volatile
-        private var instance: UserRepository? = null
+        private var instance: Repository? = null
         fun getInstance(
             userPreference: UserPreference,
             apiService: ApiService
-        ): UserRepository =
+        ): Repository =
             instance ?: synchronized(this) {
-                instance ?: UserRepository(userPreference, apiService)
+                instance ?: Repository(userPreference, apiService)
             }.also { instance = it }
     }
 }

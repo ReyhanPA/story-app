@@ -10,11 +10,11 @@ import com.reyhanpa.storyapp.data.pref.UserModel
 import com.reyhanpa.storyapp.data.remote.response.ErrorResponse
 import com.reyhanpa.storyapp.data.remote.response.LoginResponse
 import com.reyhanpa.storyapp.data.remote.response.RegisterResponse
-import com.reyhanpa.storyapp.repositories.UserRepository
+import com.reyhanpa.storyapp.repositories.Repository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class AuthViewModel(private val repository: UserRepository) : ViewModel() {
+class AuthViewModel(private val repository: Repository) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 

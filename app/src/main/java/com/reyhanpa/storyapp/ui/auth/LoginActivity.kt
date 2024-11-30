@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.reyhanpa.storyapp.R
 import com.reyhanpa.storyapp.data.pref.UserModel
 import com.reyhanpa.storyapp.databinding.ActivityLoginBinding
 import com.reyhanpa.storyapp.ui.ViewModelFactory
@@ -30,17 +31,17 @@ class LoginActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
     }
 
     private fun setupView() {
-        @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
+            window.insetsController?.show(WindowInsets.Type.statusBars())
         } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+            window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
         supportActionBar?.hide()
     }
@@ -53,10 +54,10 @@ class LoginActivity : AppCompatActivity() {
             viewModel.login(email, password).observe(this) { loginResponse ->
                 val message = loginResponse.message
                 if (loginResponse.error == true) {
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    showToast(message ?: resources.getString(R.string.login_failed_message))
                 } else {
                     viewModel.saveSession(UserModel(email, loginResponse.loginResult?.token.toString()))
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    showToast(message ?: resources.getString(R.string.login_success_message))
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
@@ -98,6 +99,15 @@ class LoginActivity : AppCompatActivity() {
             )
             startDelay = 100
         }.start()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(state: Boolean) {
+        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
+        binding.loginButton.isEnabled = !state
     }
 
 }
