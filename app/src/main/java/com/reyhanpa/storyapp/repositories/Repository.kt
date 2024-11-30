@@ -5,8 +5,11 @@ import com.reyhanpa.storyapp.data.pref.UserPreference
 import com.reyhanpa.storyapp.data.remote.response.LoginResponse
 import com.reyhanpa.storyapp.data.remote.response.RegisterResponse
 import com.reyhanpa.storyapp.data.remote.response.StoryResponse
+import com.reyhanpa.storyapp.data.remote.response.UploadResponse
 import com.reyhanpa.storyapp.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class Repository private constructor(
     private val userPreference: UserPreference,
@@ -35,6 +38,10 @@ class Repository private constructor(
 
     suspend fun getStories(): StoryResponse {
         return apiService.getStories()
+    }
+
+    suspend fun uploadImage(multipartBody: MultipartBody.Part, description: RequestBody): UploadResponse {
+        return apiService.uploadImage(multipartBody, description)
     }
 
     companion object {

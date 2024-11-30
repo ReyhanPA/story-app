@@ -1,18 +1,23 @@
 package com.reyhanpa.storyapp.ui.main
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.reyhanpa.storyapp.data.remote.response.ListStoryItem
 import com.reyhanpa.storyapp.databinding.ActivityMainBinding
 import com.reyhanpa.storyapp.ui.ViewModelFactory
+import com.reyhanpa.storyapp.ui.upload.UploadActivity
 import com.reyhanpa.storyapp.ui.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
@@ -27,13 +32,45 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupView()
-        setupRecyclerView()
-        setupObservers()
-        setupAction()
+        viewModel.getSession().observe(this) { user ->
+            if (!user.isLogin) {
+                startActivity(Intent(this, WelcomeActivity::class.java))
+                finish()
+            } else {
+                viewModel.getStories()
+                setupView()
+                setupRecyclerView()
+                setupObservers()
+                setupAction()
+            }
+        }
 
-        viewModel.getStories()
+        if (!allPermissionsGranted()) {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        } else {
+            setupView()
+            setupRecyclerView()
+            setupObservers()
+            setupAction()
+        }
+
+        binding.fabUpload.setOnClickListener {
+            val intent = Intent(this, UploadActivity::class.java)
+            startActivity(intent)
+        }
     }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(this, "Permission request granted", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Permission request denied", Toast.LENGTH_LONG).show()
+            }
+        }
+
+    private fun allPermissionsGranted() =
+        ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
 
     private fun setupView() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -51,13 +88,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        viewModel.getSession().observe(this) { user ->
-            if (!user.isLogin) {
-                startActivity(Intent(this, WelcomeActivity::class.java))
-                finish()
-            }
-        }
-
         viewModel.stories.observe(this) { stories ->
             setStoryData(stories.listStory)
         }
@@ -76,6 +106,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.actionLogout.setOnClickListener {
             viewModel.logout()
+            startActivity(Intent(this, WelcomeActivity::class.java))
+            finish()
         }
     }
 

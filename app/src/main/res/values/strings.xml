@@ -27,4 +27,17 @@
     <string name="story_name">Story Name</string>
     <string name="story_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="error_fetch_message">Failed to retrieve data</string>
+    <string name="detail_header">Detail Story</string>
+    <string name="main_header">StoryApp</string>
+    <string name="fab_description">Upload Story</string>
+    <string name="upload_header">Upload Story</string>
+    <string name="image_preview_description">Image Preview</string>
+    <string name="text_camera">Camera</string>
+    <string name="text_gallery">Gallery</string>
+    <string name="text_upload">Upload</string>
+    <string name="hint_description">Enter description</string>
+    <string name="no_image_selected">No image selected</string>
+    <string name="empty_image_warning">Enter image first!</string>
+    <string name="unknown_error">Unknown error!</string>
+    <string name="null_error">Null error!</string>
 </resources>

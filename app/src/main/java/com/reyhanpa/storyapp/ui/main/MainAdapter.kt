@@ -1,14 +1,17 @@
 package com.reyhanpa.storyapp.ui.main
 
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.reyhanpa.storyapp.data.remote.response.ListStoryItem
 import com.reyhanpa.storyapp.databinding.ItemStoryBinding
-import com.reyhanpa.storyapp.ui.detail.DetailStoryActivity
+import com.reyhanpa.storyapp.ui.detail.DetailActivity
 import com.reyhanpa.storyapp.utils.DiffUtilCallback
 
 class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(DiffUtilCallback) {
@@ -30,12 +33,20 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(DiffU
                 .into(binding.imgItemStory)
             binding.tvItemStoryName.text = story.name
             binding.tvItemStoryDescription.text = story.description
-            binding.root.setOnClickListener {
-                val intent = Intent(binding.root.context, DetailStoryActivity::class.java)
-                intent.putExtra(DetailStoryActivity.EXTRA_STORY_IMAGE, story.photoUrl)
-                intent.putExtra(DetailStoryActivity.EXTRA_STORY_NAME, story.name)
-                intent.putExtra(DetailStoryActivity.EXTRA_STORY_DESCRIPTION, story.description)
-                binding.root.context.startActivity(intent)
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.EXTRA_STORY_IMAGE, story.photoUrl)
+                intent.putExtra(DetailActivity.EXTRA_STORY_NAME, story.name)
+                intent.putExtra(DetailActivity.EXTRA_STORY_DESCRIPTION, story.description)
+
+                val optionsCompat: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        itemView.context as Activity,
+                        Pair(binding.imgItemStory, "image"),
+                        Pair(binding.tvItemStoryName, "name"),
+                        Pair(binding.tvItemStoryDescription, "description")
+                    )
+                itemView.context.startActivity(intent, optionsCompat.toBundle())
             }
         }
     }

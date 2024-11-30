@@ -3,14 +3,14 @@ package com.reyhanpa.storyapp.ui.detail
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.reyhanpa.storyapp.databinding.ActivityDetailStoryBinding
+import com.reyhanpa.storyapp.databinding.ActivityDetailBinding
 
-class DetailStoryActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityDetailStoryBinding
+class DetailActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDetailStoryBinding.inflate(layoutInflater)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val storyImage = intent.getStringExtra(EXTRA_STORY_IMAGE)
