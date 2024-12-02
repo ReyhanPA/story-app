@@ -47,12 +47,6 @@ class Repository private constructor(
     companion object {
         @Volatile
         private var instance: Repository? = null
-        fun getInstance(
-            userPreference: UserPreference,
-            apiService: ApiService
-        ): Repository =
-            instance ?: synchronized(this) {
-                instance ?: Repository(userPreference, apiService)
-            }.also { instance = it }
+        fun getInstance(userPref: UserPreference, apiService: ApiService) = Repository(userPref, apiService)
     }
 }
