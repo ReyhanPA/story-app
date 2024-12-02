@@ -1,6 +1,5 @@
 package com.reyhanpa.storyapp.data.remote.retrofit
 
-import android.util.Log
 import com.reyhanpa.storyapp.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -13,7 +12,6 @@ class ApiConfig {
         private const val BASE_URL = BuildConfig.BASE_URL
 
         fun getApiService(token: String): ApiService {
-            Log.d("ApiConfigToken", token)
             val loggingInterceptor = if(BuildConfig.DEBUG) {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             } else {
