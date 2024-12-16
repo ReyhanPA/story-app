@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.reyhanpa.storyapp.BuildConfig
@@ -56,10 +57,26 @@ class UploadActivity : AppCompatActivity() {
             }
         }
 
+        if (!allPermissionsGranted()) {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+
         viewModel.isLoading.observe(this) {
             showLoading(it)
         }
     }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(this, "Permission request granted", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Permission request denied", Toast.LENGTH_LONG).show()
+            }
+        }
+
+    private fun allPermissionsGranted() =
+        ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
 
     private val launcherGallery = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()

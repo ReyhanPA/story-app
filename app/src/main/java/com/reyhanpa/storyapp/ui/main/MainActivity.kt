@@ -1,18 +1,14 @@
 package com.reyhanpa.storyapp.ui.main
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.reyhanpa.storyapp.databinding.ActivityMainBinding
 import com.reyhanpa.storyapp.ui.ViewModelFactory
@@ -47,10 +43,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (!allPermissionsGranted()) {
-            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-        }
-
         binding.fabUpload.setOnClickListener {
             val intent = Intent(this, UploadActivity::class.java)
             startActivity(intent)
@@ -62,18 +54,6 @@ class MainActivity : AppCompatActivity() {
             adapter.submitData(lifecycle, it)
         }
     }
-
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                Toast.makeText(this, "Permission request granted", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "Permission request denied", Toast.LENGTH_LONG).show()
-            }
-        }
-
-    private fun allPermissionsGranted() =
-        ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
 
     private fun setupView() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

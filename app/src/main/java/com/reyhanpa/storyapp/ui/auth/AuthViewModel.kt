@@ -11,6 +11,7 @@ import com.reyhanpa.storyapp.data.remote.response.ErrorResponse
 import com.reyhanpa.storyapp.data.remote.response.LoginResponse
 import com.reyhanpa.storyapp.data.remote.response.RegisterResponse
 import com.reyhanpa.storyapp.repositories.Repository
+import com.reyhanpa.storyapp.utils.IdlingResource
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -45,6 +46,7 @@ class AuthViewModel(private val repository: Repository) : ViewModel() {
 
     fun login(email: String, password: String): LiveData<LoginResponse> {
         _isLoading.value = true
+        IdlingResource.increment()
         val liveDataResponse = MutableLiveData<LoginResponse>()
         viewModelScope.launch {
             try {
@@ -56,8 +58,10 @@ class AuthViewModel(private val repository: Repository) : ViewModel() {
                 val loginFailMessage = Gson().fromJson(jsonInString, ErrorResponse::class.java).message
                 liveDataResponse.postValue(loginFailResponse)
                 Log.e(TAG, "onFailure: $loginFailMessage")
+            } finally {
+                IdlingResource.decrement()
+                _isLoading.value = false
             }
-            _isLoading.value = false
         }
         return liveDataResponse
     }

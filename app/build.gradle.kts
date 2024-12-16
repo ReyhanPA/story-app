@@ -78,11 +78,6 @@ dependencies {
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.paging)
-    implementation(libs.play.services.maps)
-    testImplementation(libs.junit.junit)
-    testImplementation(libs.junit.junit)
-    testImplementation(libs.junit.junit)
-    testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)
     ksp(libs.room.compiler)
 
@@ -97,7 +92,6 @@ dependencies {
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     // Coroutine Support
     implementation(libs.androidx.room.ktx)
@@ -105,9 +99,6 @@ dependencies {
     // Coroutine
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.jetbrains.kotlinx.coroutines.android)
-
-    // Worker
-    implementation(libs.androidx.work.runtime)
 
     // Pagination
     implementation(libs.androidx.paging.runtime.ktx)
@@ -123,4 +114,18 @@ dependencies {
     // Location
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+
+    // UI Testing dependencies
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.contrib)
+    androidTestImplementation(libs.androidx.espresso.intents)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.androidx.runner)
+
+    // Idling Resources
+    androidTestImplementation(libs.espresso.idling.resource)
+    implementation(libs.espresso.idling.resource)
+
+    // MockWebServer for mock responses
+    testImplementation(libs.mockwebserver)
 }
