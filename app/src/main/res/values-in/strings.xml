@@ -46,4 +46,10 @@
     <string name="terrain_type">Lahan</string>
     <string name="hybrid_type">Gabungan</string>
     <string name="retry">Coba lagi</string>
+    <string name="input_location">Masukkan Lokasi</string>
+    <string name="empty_description_warning">Deskripsi masih kosong!</string>
+    <string name="location_not_found">Lokasi tidak ditemukan</string>
+    <string name="location_error">Lokasi error</string>
+    <string name="success_upload">Berhasil mengunggah</string>
+    <string name="story_location">Lintang: %1$s, bujur: %2$s</string>
 </resources>

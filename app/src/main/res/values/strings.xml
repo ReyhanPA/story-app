@@ -46,4 +46,10 @@
     <string name="terrain_type">Terrain</string>
     <string name="hybrid_type">Hybrid</string>
     <string name="retry">Retry</string>
+    <string name="input_location">Input Location</string>
+    <string name="empty_description_warning">Description cannot be empty!</string>
+    <string name="location_not_found">Location not found</string>
+    <string name="location_error">Location error</string>
+    <string name="success_upload">Upload success</string>
+    <string name="story_location">Latitude: %1$s, longitude: %2$s</string>
 </resources>

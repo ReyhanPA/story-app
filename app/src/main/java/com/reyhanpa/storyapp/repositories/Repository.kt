@@ -72,8 +72,13 @@ class Repository private constructor(
         return apiService.getStoriesWithLocation()
     }
 
-    suspend fun uploadImage(multipartBody: MultipartBody.Part, description: RequestBody): UploadResponse {
-        return apiService.uploadImage(multipartBody, description)
+    suspend fun uploadImage(
+        multipartBody: MultipartBody.Part,
+        description: RequestBody,
+        lat: RequestBody? = null,
+        lon: RequestBody? = null
+    ): UploadResponse {
+        return apiService.uploadImage(multipartBody, description, lat, lon)
     }
 
     companion object {
