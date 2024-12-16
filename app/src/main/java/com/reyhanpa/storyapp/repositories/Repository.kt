@@ -1,7 +1,14 @@
 package com.reyhanpa.storyapp.repositories
 
+import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.reyhanpa.storyapp.data.pref.UserModel
 import com.reyhanpa.storyapp.data.pref.UserPreference
+import com.reyhanpa.storyapp.data.remote.pagination.StoryPagingSource
+import com.reyhanpa.storyapp.data.remote.response.ListStoryItem
 import com.reyhanpa.storyapp.data.remote.response.LoginResponse
 import com.reyhanpa.storyapp.data.remote.response.RegisterResponse
 import com.reyhanpa.storyapp.data.remote.response.StoryResponse
@@ -36,8 +43,15 @@ class Repository private constructor(
         return apiService.login(email, password)
     }
 
-    suspend fun getStories(): StoryResponse {
-        return apiService.getStories()
+    fun getStories(): LiveData<PagingData<ListStoryItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(apiService)
+            }
+        ).liveData
     }
 
     suspend fun getStoriesWithLocation(): StoryResponse {

@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import com.reyhanpa.storyapp.BuildConfig
 import com.reyhanpa.storyapp.R
 import com.reyhanpa.storyapp.databinding.ActivityMapBinding
 import com.reyhanpa.storyapp.ui.ViewModelFactory
@@ -61,10 +62,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             val success =
                 mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
             if (!success) {
-                Log.e(TAG, "Style parsing failed.")
+                if (BuildConfig.DEBUG) Log.e(TAG, "Style parsing failed.")
             }
         } catch (exception: Resources.NotFoundException) {
-            Log.e(TAG, "Can't find style. Error: ", exception)
+            if (BuildConfig.DEBUG) Log.e(TAG, "Can't find style. Error: ", exception)
         }
     }
 
@@ -98,7 +99,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     )
                 )
             } catch (e: IllegalStateException) {
-                Log.e(TAG, "Bounds could not be calculated: ${e.message}")
+                if (BuildConfig.DEBUG) Log.e(TAG, "Bounds could not be calculated: ${e.message}")
             }
         }
     }

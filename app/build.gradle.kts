@@ -76,7 +76,11 @@ dependencies {
 
     // Room
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.paging)
     implementation(libs.play.services.maps)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
     ksp(libs.room.compiler)
 
     // Datastore
@@ -101,4 +105,16 @@ dependencies {
 
     // Worker
     implementation(libs.androidx.work.runtime)
+
+    // Pagination
+    implementation(libs.androidx.paging.runtime.ktx)
+
+    // Testing
+    androidTestImplementation(libs.androidx.core.testing)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
 }

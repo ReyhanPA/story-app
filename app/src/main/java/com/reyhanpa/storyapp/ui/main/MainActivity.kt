@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.reyhanpa.storyapp.data.remote.response.ListStoryItem
 import com.reyhanpa.storyapp.databinding.ActivityMainBinding
 import com.reyhanpa.storyapp.ui.ViewModelFactory
 import com.reyhanpa.storyapp.ui.map.MapActivity
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             } else {
-                viewModel.getStories()
+                getData()
                 setupView()
                 setupRecyclerView()
                 setupObservers()
@@ -48,16 +47,17 @@ class MainActivity : AppCompatActivity() {
 
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-        } else {
-            setupView()
-            setupRecyclerView()
-            setupObservers()
-            setupAction()
         }
 
         binding.fabUpload.setOnClickListener {
             val intent = Intent(this, UploadActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun getData() {
+        viewModel.stories.observe(this) {
+            adapter.submitData(lifecycle, it)
         }
     }
 
@@ -84,15 +84,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         adapter = MainAdapter()
-        binding.rvStory.adapter = adapter
+        binding.rvStory.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
         binding.rvStory.layoutManager = LinearLayoutManager(this)
     }
 
     private fun setupObservers() {
-        viewModel.stories.observe(this) { stories ->
-            setStoryData(stories.listStory)
-        }
-
         viewModel.isLoading.observe(this) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
@@ -113,10 +113,6 @@ class MainActivity : AppCompatActivity() {
         binding.actionMap.setOnClickListener {
             startActivity(Intent(this, MapActivity::class.java))
         }
-    }
-
-    private fun setStoryData(story: List<ListStoryItem>) {
-        adapter.submitList(story)
     }
 
     private fun showError(message: String) {
