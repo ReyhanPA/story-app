@@ -31,6 +31,8 @@ class UploadActivity : AppCompatActivity() {
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.hide()
+
         binding.buttonGallery.setOnClickListener { startGallery() }
         binding.buttonCamera.setOnClickListener { startCamera() }
         binding.buttonAdd.setOnClickListener { uploadImage() }

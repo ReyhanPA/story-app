@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.reyhanpa.storyapp.data.remote.response.ListStoryItem
 import com.reyhanpa.storyapp.databinding.ActivityMainBinding
 import com.reyhanpa.storyapp.ui.ViewModelFactory
+import com.reyhanpa.storyapp.ui.map.MapActivity
 import com.reyhanpa.storyapp.ui.upload.UploadActivity
 import com.reyhanpa.storyapp.ui.welcome.WelcomeActivity
 
@@ -108,6 +109,9 @@ class MainActivity : AppCompatActivity() {
             viewModel.logout()
             startActivity(Intent(this, WelcomeActivity::class.java))
             finish()
+        }
+        binding.actionMap.setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java))
         }
     }
 

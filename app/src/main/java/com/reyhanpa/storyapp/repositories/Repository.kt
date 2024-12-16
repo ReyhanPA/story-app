@@ -40,6 +40,10 @@ class Repository private constructor(
         return apiService.getStories()
     }
 
+    suspend fun getStoriesWithLocation(): StoryResponse {
+        return apiService.getStoriesWithLocation()
+    }
+
     suspend fun uploadImage(multipartBody: MultipartBody.Part, description: RequestBody): UploadResponse {
         return apiService.uploadImage(multipartBody, description)
     }

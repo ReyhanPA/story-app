@@ -40,4 +40,9 @@
     <string name="empty_image_warning">Masukkan gambar dahulu!</string>
     <string name="unknown_error">Error tidak diketahui!</string>
     <string name="null_error">Error null!</string>
+    <string name="title_activity_map">Map</string>
+    <string name="normal_type">Normal</string>
+    <string name="satellite_type">Satelit</string>
+    <string name="terrain_type">Lahan</string>
+    <string name="hybrid_type">Gabungan</string>
 </resources>

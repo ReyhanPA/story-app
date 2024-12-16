@@ -13,6 +13,8 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.hide()
+
         val storyImage = intent.getStringExtra(EXTRA_STORY_IMAGE)
         val storyName = intent.getStringExtra(EXTRA_STORY_NAME)
         val storyDescription = intent.getStringExtra(EXTRA_STORY_DESCRIPTION)

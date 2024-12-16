@@ -40,4 +40,9 @@
     <string name="empty_image_warning">Enter image first!</string>
     <string name="unknown_error">Unknown error!</string>
     <string name="null_error">Null error!</string>
+    <string name="title_activity_map">Map</string>
+    <string name="normal_type">Normal</string>
+    <string name="satellite_type">Satellite</string>
+    <string name="terrain_type">Terrain</string>
+    <string name="hybrid_type">Hybrid</string>
 </resources>
