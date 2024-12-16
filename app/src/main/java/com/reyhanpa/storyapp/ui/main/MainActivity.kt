@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
+        adapter = MainAdapter()
 
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
@@ -65,7 +66,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = MainAdapter()
         binding.rvStory.adapter = adapter.withLoadStateFooter(
             footer = LoadingStateAdapter {
                 adapter.retry()
@@ -99,5 +99,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getData()
     }
 }
