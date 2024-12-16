@@ -83,7 +83,6 @@ dependencies {
     testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)
-    testImplementation(libs.junit.junit)
     ksp(libs.room.compiler)
 
     // Datastore

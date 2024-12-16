@@ -1,24 +1,30 @@
 package com.reyhanpa.storyapp.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
+import androidx.paging.map
+import com.reyhanpa.storyapp.data.local.mediator.StoryRemoteMediator
+import com.reyhanpa.storyapp.data.local.room.StoryDatabase
 import com.reyhanpa.storyapp.data.pref.UserModel
 import com.reyhanpa.storyapp.data.pref.UserPreference
-import com.reyhanpa.storyapp.data.remote.pagination.StoryPagingSource
 import com.reyhanpa.storyapp.data.remote.response.ListStoryItem
 import com.reyhanpa.storyapp.data.remote.response.LoginResponse
 import com.reyhanpa.storyapp.data.remote.response.RegisterResponse
 import com.reyhanpa.storyapp.data.remote.response.StoryResponse
 import com.reyhanpa.storyapp.data.remote.response.UploadResponse
 import com.reyhanpa.storyapp.data.remote.retrofit.ApiService
+import com.reyhanpa.storyapp.utils.toStoryItem
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class Repository private constructor(
+    private val storyDatabase: StoryDatabase,
     private val userPreference: UserPreference,
     private val apiService: ApiService
 ) {
@@ -44,14 +50,22 @@ class Repository private constructor(
     }
 
     fun getStories(): LiveData<PagingData<ListStoryItem>> {
+        @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
+            remoteMediator = StoryRemoteMediator(storyDatabase, apiService),
             pagingSourceFactory = {
-                StoryPagingSource(apiService)
+//                StoryPagingSource(apiService)
+                storyDatabase.storyDao().getAllStories()
             }
-        ).liveData
+        ).liveData.map { pagingData ->
+            pagingData.map { listStoryEntity ->
+                listStoryEntity.toStoryItem()
+            }
+        }
+
     }
 
     suspend fun getStoriesWithLocation(): StoryResponse {
@@ -65,6 +79,6 @@ class Repository private constructor(
     companion object {
         @Volatile
         private var instance: Repository? = null
-        fun getInstance(userPref: UserPreference, apiService: ApiService) = Repository(userPref, apiService)
+        fun getInstance(storyDatabase: StoryDatabase, userPref: UserPreference, apiService: ApiService) = Repository(storyDatabase, userPref, apiService)
     }
 }

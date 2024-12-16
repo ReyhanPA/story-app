@@ -1,0 +1,4 @@
+package com.reyhanpa.storyapp.data.local.entity
+
+class RemoteKeys {
+}
